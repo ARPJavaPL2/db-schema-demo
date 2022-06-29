@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+
+  mysql_db:
+    image: arm64v8/mysql:oracle
+    container_name: mysql-db
+    restart: always
+    networks:
+      - test_bridge
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: custom_db
+      MYSQL_DB_PASS: pass
+      MYSQL_DB_USERNAME: root
+      MYSQL_DB_URL: "jdbc:mysql://mysql-db:3306/custom_db?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+    volumes:
+      - type: volume
+        source: mysql-data
+        target: "/var/lib/mysql"
+
+networks:
+  test_bridge:
+    name: test_bridge
+    driver: bridge
+
+volumes:
+  mysql-data:
+    name: mysql-data
